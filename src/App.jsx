@@ -32,6 +32,19 @@ function reducer(state,action){
     case"CREATE":{
       return [action.newItem,...state];
     }
+    case "UPDATE":{
+      return state.map((it)=>
+      it.id === action.targetId
+        ?{
+          ...it,
+          isDone: !it.isDone,
+        }
+      :it
+      );
+    }
+    case "DELETE":{
+      return state.filter((it) => it.id !==action.targetId);
+    }
     default:
       return state;
   }  
@@ -51,13 +64,21 @@ function App(){
         createDate:new Date().getTime(),
       },
     })
-    idRef,current +=1;
+    idRef.current +=1;
   }
 
   const onUpdate = (targetId)=>{
+    dispatch({
+      type:"UPDATE",
+      targetId,
+    });
   };
 
   const onDelete=(targetId)=>{
+    dispatch({
+      type:"DELETE",
+      targetId,
+    });
   };
 
   return (
